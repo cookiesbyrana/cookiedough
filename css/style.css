@@ -104,16 +104,16 @@ a{ color:inherit; }
 .menu-sub-label{ font-size:12.5px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--rose-deep); margin:0 0 16px; }
 .cookie-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:48px; }
 .cookie-card{ background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px 18px; text-align:center; box-shadow:var(--shadow); }
-.cookie-dot{ width:52px; height:52px; border-radius:50%; margin:0 auto 14px; display:flex; align-items:center; justify-content:center; font-size:22px; }
-.dot-golden{ background:#EFE0BE; }
-.dot-pretzel{ background:#E9CBA0; }
-.dot-redvelvet{ background:#DDB3B8; }
-.dot-classic{ background:#E7D3AE; }
+.cookie-dot{ width:64px; height:64px; border-radius:50%; margin:0 auto 14px; overflow:hidden; box-shadow: 0 3px 10px rgba(59,36,23,0.18); border: 2px solid var(--card); }
+.cookie-dot img{ width:100%; height:100%; object-fit:cover; }
 .cookie-card h3{ font-size:15.5px; line-height:1.3; margin-bottom:6px; min-height:39px; display:flex; align-items:center; justify-content:center; }
 .cookie-card .price{ font-family:'Fraunces',serif; font-weight:600; color:var(--rose-deep); font-size:17px; margin-bottom:10px; }
 .cookie-card p.note{ font-size:12.5px; color:var(--cocoa-soft); font-style:italic; line-height:1.4; margin:0; }
 .box-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
-.box-card{ background:var(--cream-2); border:1px solid var(--line); border-radius:18px; padding:22px 20px; box-shadow:var(--shadow); }
+.box-card{ background:var(--cream-2); border:1px solid var(--line); border-radius:18px; overflow:hidden; box-shadow:var(--shadow); }
+.box-photo{ width:100%; aspect-ratio: 251/367; overflow:hidden; }
+.box-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+.box-body{ padding:20px; }
 .box-card h3{ font-size:16px; margin-bottom:10px; line-height:1.3; min-height:42px; }
 .box-card ul{ list-style:none; margin:0 0 16px; padding:0; }
 .box-card li{ font-size:13.5px; color:var(--cocoa-soft); padding:3px 0; }
