@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reviews — Cookie Dough by Rana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar wrap">
+  <a class="brand" href="index.html">
+    <div class="brand-mark">R</div>
+    <div class="brand-name">Cookie Dough by Rana<span>Freeze · Thaw · Bake · Enjoy</span></div>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="index.html">Home</a>
+    <a class="nav-link" href="menu.html">Menu</a>
+    <a class="nav-link active" href="reviews.html">Reviews</a>
+    <a class="ig-link" href="https://www.instagram.com/cookiedoughbyrana" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></svg>
+      @cookiedoughbyrana
+    </a>
+  </div>
+</div>
+
+<div class="page-header wrap">
+  <h1>What customers are saying</h1>
+  <p>Real reviews from real orders — added here as they come in.</p>
+</div>
+
+<section class="reviews">
+  <div class="wrap">
+
+    <!--
+      LIVE REVIEWS: this page fetches your Google Sheet (published as CSV) and
+      builds review cards automatically. See script at the bottom of this file
+      for the SHEET_CSV_URL setting. Only rows with "yes" in the Approved
+      column are shown.
+    -->
+
+    <div id="loading-state" class="empty-state">
+      <div class="stars">★ ★ ★ ★ ★</div>
+      <p style="margin:0;">Loading reviews…</p>
+    </div>
+
+    <div id="empty-state" class="empty-state hidden">
+      <div class="stars">★ ★ ★ ★ ★</div>
+      <h3>Be the first to leave a review</h3>
+      <p>This page is ready for your reviews — tap below to share what you thought of your order.</p>
+      <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSevzHUflnPCBegyRovaplL9R8rZOSoKz-Ws8k4ZppeKEsU-uQ/viewform?usp=publish-editor" target="_blank" rel="noopener">Leave a review</a>
+    </div>
+
+    <div id="reviews-grid" class="grid-reviews hidden"></div>
+    <div style="text-align:center; margin-top:40px;">
+      <a class="btn btn-secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSevzHUflnPCBegyRovaplL9R8rZOSoKz-Ws8k4ZppeKEsU-uQ/viewform?usp=publish-editor" target="_blank" rel="noopener">Leave your own review</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div>
+      <div class="fbrand">Cookie Dough by Rana</div>
+      <div class="fsub">Homemade with love, one batch at a time.</div>
+    </div>
+    <div class="flinks">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="https://www.instagram.com/cookiedoughbyrana" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script>
+  // Paste your published Google Sheet CSV link between the quotes below.
+  // Sheet → File → Share → Publish to web → CSV format → copy the pub?output=csv link.
+  const SHEET_CSV_URL = "PASTE_YOUR_PUBLISHED_CSV_LINK_HERE";
+
+  function findKey(row, matches) {
+    const keys = Object.keys(row);
+    for (const m of matches) {
+      const hit = keys.find(k => k.toLowerCase().includes(m));
+      if (hit) return hit;
+    }
+    return null;
+  }
+
+  function starsFor(value) {
+    if (!value) return "★★★★★";
+    const filled = (value.match(/★|⭐/g) || []).length;
+    if (filled > 0) return "★".repeat(filled) + "☆".repeat(Math.max(0, 5 - filled));
+    const num = parseInt(value, 10);
+    if (!isNaN(num)) return "★".repeat(num) + "☆".repeat(Math.max(0, 5 - num));
+    return "★★★★★";
+  }
+
+  function renderReviews(rows) {
+    const loading = document.getElementById("loading-state");
+    const empty = document.getElementById("empty-state");
+    const grid = document.getElementById("reviews-grid");
+    loading.classList.add("hidden");
+
+    if (!rows.length) {
+      empty.classList.remove("hidden");
+      return;
+    }
+
+    const sample = rows[0];
+    const nameKey = findKey(sample, ["name"]);
+    const ratingKey = findKey(sample, ["rate", "rating"]);
+    const itemsKey = findKey(sample, ["order"]);
+    const textKey = findKey(sample, ["experience", "review"]);
+
+    grid.innerHTML = rows.map(row => {
+      const name = (nameKey && row[nameKey]) ? row[nameKey].trim() : "Customer";
+      const initial = name.charAt(0).toUpperCase() || "R";
+      const items = (itemsKey && row[itemsKey]) ? row[itemsKey].split(",")[0].trim() : "";
+      const text = (textKey && row[textKey]) ? row[textKey].trim() : "";
+      const stars = starsFor(ratingKey ? row[ratingKey] : "");
+      return `
+        <div class="review-card">
+          <div class="stars">${stars}</div>
+          <p class="quote">${text.replace(/</g, "&lt;")}</p>
+          <div class="who">
+            <div class="avatar">${initial}</div>
+            <div class="meta"><b>${name.replace(/</g, "&lt;")}</b>${items.replace(/</g, "&lt;")}</div>
+          </div>
+        </div>`;
+    }).join("");
+
+    grid.classList.remove("hidden");
+  }
+
+  function loadReviews() {
+    const loading = document.getElementById("loading-state");
+    const empty = document.getElementById("empty-state");
+
+    if (!SHEET_CSV_URL || SHEET_CSV_URL.indexOf("PASTE_") === 0) {
+      loading.classList.add("hidden");
+      empty.classList.remove("hidden");
+      return;
+    }
+
+    fetch(SHEET_CSV_URL)
+      .then(res => res.text())
+      .then(csvText => {
+        const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+        const approvedKeyRow = parsed.data[0] || {};
+        const approvedKey = findKey(approvedKeyRow, ["approved", "show"]);
+        const rows = approvedKey
+          ? parsed.data.filter(r => (r[approvedKey] || "").trim().toLowerCase().startsWith("y"))
+          : parsed.data;
+        renderReviews(rows);
+      })
+      .catch(() => {
+        loading.classList.add("hidden");
+        empty.classList.remove("hidden");
+      });
+  }
+
+  loadReviews();
+</script>
+
+</body>
+</html>
