@@ -103,9 +103,10 @@ a{ color:inherit; }
 .menu-inner{ padding-top:20px; }
 .menu-sub-label{ font-size:12.5px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--rose-deep); margin:0 0 16px; }
 .cookie-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:48px; }
-.cookie-card{ background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px 18px; text-align:center; box-shadow:var(--shadow); }
-.cookie-dot{ width:64px; height:64px; border-radius:50%; margin:0 auto 14px; overflow:hidden; box-shadow: 0 3px 10px rgba(59,36,23,0.18); border: 2px solid var(--card); }
-.cookie-dot img{ width:100%; height:100%; object-fit:cover; }
+.cookie-card{ background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden; box-shadow:var(--shadow); }
+.cookie-photo{ width:100%; aspect-ratio: 7/5; overflow:hidden; background:#fff; }
+.cookie-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+.cookie-body{ padding:20px 18px; text-align:center; }
 .cookie-card h3{ font-size:15.5px; line-height:1.3; margin-bottom:6px; min-height:39px; display:flex; align-items:center; justify-content:center; }
 .cookie-card .price{ font-family:'Fraunces',serif; font-weight:600; color:var(--rose-deep); font-size:17px; margin-bottom:10px; }
 .cookie-card p.note{ font-size:12.5px; color:var(--cocoa-soft); font-style:italic; line-height:1.4; margin:0; }
