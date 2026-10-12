@@ -3,7 +3,7 @@
 
   // Apps Script Web app URL (see apps-script/Code.gs). Redeploying as a
   // "New version" keeps this URL, so it only changes for a brand-new deployment.
-  var API_URL = "https://script.google.com/macros/s/AKfycbwXTeu1wOT7TBYhcZ0qiVEF8fRygfJeXwp8ak3y1JE1lo_nC1IB0cPP2xSXPT0f7xYcpw/exec";
+  var API_URL = "https://script.google.com/macros/s/AKfycbwcbctcsusIG1_lFj6kQXVj2Wcbt3VVT1JJ3PLTCVYbFSc3JmDJ1f8trOXiU-U0B2IP/exec";
   var CONFIGURED = API_URL.indexOf("https://script.google.com/") === 0;
 
   // Messages in each site language (picked from <html lang="...">)
