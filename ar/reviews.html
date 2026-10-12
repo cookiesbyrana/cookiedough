@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>التقييمات — Cookie Dough by Rana</title>
-<meta name="description" content="تقييمات حقيقية من زبائن Cookie Dough by Rana.">
+<meta name="description" content="تقييمات حقيقية من زبائن Cookie Dough by Rana — وشاركنا رأيك أيضًا.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ar_AR">
 <meta property="og:title" content="التقييمات — Cookie Dough by Rana">
-<meta property="og:description" content="تقييمات حقيقية من زبائن Cookie Dough by Rana.">
+<meta property="og:description" content="تقييمات حقيقية من زبائن Cookie Dough by Rana — وشاركنا رأيك أيضًا.">
 <meta property="og:url" content="https://cookiesbyrana.netlify.app/ar/reviews.html">
 <meta property="og:image" content="https://cookiesbyrana.netlify.app/assets/img/hero-stack.jpg">
 <meta name="theme-color" content="#F4EBDD">
@@ -42,14 +42,14 @@
 
 <div class="page-header wrap">
   <h1>ماذا يقول الزبائن</h1>
-  <p>تقييمات حقيقية من طلبات حقيقية — نضيفها هنا فور وصولها.</p>
+  <p>تقييمات حقيقية من طلبات حقيقية.</p>
+  <div class="reviews-cta"><a class="btn btn-primary" href="#write-review">اكتب تقييمًا</a></div>
 </div>
 
-<section class="reviews">
+<section class="reviews" style="padding-top:36px;">
   <div class="wrap">
 
-    <!-- Reviews load live from the Google Sheet — see js/reviews.js. -->
-
+    <!-- Approved reviews load here from your Google Sheet (see js/reviews.js) -->
     <div id="loading-state" class="empty-state">
       <div class="stars">★ ★ ★ ★ ★</div>
       <p style="margin:0;">جارٍ تحميل التقييمات…</p>
@@ -58,13 +58,73 @@
     <div id="empty-state" class="empty-state hidden">
       <div class="stars">★ ★ ★ ★ ★</div>
       <h3>كن أول من يترك تقييمًا</h3>
-      <p>هذه الصفحة جاهزة لتقييماتكم — اضغط بالأسفل وشاركنا رأيك في طلبك.</p>
-      <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSevzHUflnPCBegyRovaplL9R8rZOSoKz-Ws8k4ZppeKEsU-uQ/viewform?usp=publish-editor" target="_blank" rel="noopener">اترك تقييمًا</a>
+      <p>طلبت مؤخرًا؟ يسعدنا أن نسمع رأيك.</p>
+      <a class="btn btn-primary" href="#write-review">اكتب تقييمًا</a>
     </div>
 
-    <div id="reviews-grid" class="grid-reviews hidden" data-default-name="زبون"></div>
-    <div style="text-align:center; margin-top:40px;">
-      <a class="btn btn-secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSevzHUflnPCBegyRovaplL9R8rZOSoKz-Ws8k4ZppeKEsU-uQ/viewform?usp=publish-editor" target="_blank" rel="noopener">اترك تقييمك</a>
+    <div id="reviews-grid" class="grid-reviews hidden"></div>
+  </div>
+</section>
+
+<section class="write-section" id="write-review">
+  <div class="wrap write-inner">
+    <h2>اترك تقييمًا</h2>
+    <p class="sub">يستغرق دقيقة تقريبًا، ولا حاجة لإنشاء حساب.</p>
+
+    <form id="review-form" class="review-form" novalidate>
+      <fieldset class="field">
+        <legend class="lbl">كم تقيّمنا؟</legend>
+        <div class="star-input" role="radiogroup" aria-label="التقييم بالنجوم">
+          <input type="radio" id="star5" name="rating" value="5"><label for="star5" title="5 نجوم">★</label>
+          <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="4 نجوم">★</label>
+          <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="3 نجوم">★</label>
+          <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="نجمتان">★</label>
+          <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="نجمة واحدة">★</label>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label class="lbl" for="name">اسمك</label>
+        <input type="text" id="name" name="name" maxlength="60" autocomplete="given-name" placeholder="الاسم الأول يكفي">
+      </div>
+
+      <fieldset class="field">
+        <legend class="lbl">ماذا طلبت؟ <span class="opt">(اختياري)</span></legend>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" name="items" value="Golden Van Stapele"><span>فان ستابل الذهبية</span></label>
+          <label class="chip"><input type="checkbox" name="items" value="Pretzel Cookie"><span>كوكي البريتزل</span></label>
+          <label class="chip"><input type="checkbox" name="items" value="Red Velvet"><span>ريد فيلفيت</span></label>
+          <label class="chip"><input type="checkbox" name="items" value="Classic Cookie"><span>الكوكي الكلاسيكية</span></label>
+          <label class="chip"><input type="checkbox" name="items" value="Brownies"><span>براونيز</span></label>
+          <label class="chip"><input type="checkbox" name="items" value="Frozen Dough Box"><span>علبة العجينة المجمّدة</span></label>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label class="lbl" for="review">أخبرنا عن تجربتك</label>
+        <textarea id="review" name="review" maxlength="800" placeholder="ما الذي أعجبك؟ كيف كانت الكوكيز؟"></textarea>
+        <div class="char-count" id="char-count" dir="ltr">0 / 800</div>
+      </div>
+
+      <div class="field">
+        <label class="lbl" for="instagram">حسابك على إنستغرام <span class="opt">(اختياري، لا يُعرض للعامة)</span></label>
+        <input type="text" id="instagram" name="instagram" maxlength="40" placeholder="@yourname" dir="ltr">
+      </div>
+
+      <!-- Spam trap: hidden from people, bots tend to fill it in -->
+      <div class="hp" aria-hidden="true">
+        <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+      </div>
+
+      <div id="form-msg" class="form-msg hidden" role="alert"></div>
+      <button type="submit" id="submit-review" class="btn btn-primary">أرسل تقييمي</button>
+      <p class="form-note">تظهر التقييمات على الموقع بعد موافقة رنا عليها.</p>
+    </form>
+
+    <div id="form-thanks" class="form-thanks hidden">
+      <div class="stars">★ ★ ★ ★ ★</div>
+      <h3>شكرًا لك! 💕</h3>
+      <p>تم إرسال تقييمك، وسيظهر هنا بعد الموافقة عليه.</p>
     </div>
   </div>
 </section>
@@ -83,7 +143,6 @@
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="../js/reviews.js"></script>
 
 </body>

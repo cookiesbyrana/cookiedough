@@ -176,6 +176,53 @@ footer .flinks a{ color:var(--cocoa); text-decoration:none; font-weight:600; bor
   .box-photo{ aspect-ratio:1; }
 }
 
+/* ---------- review form ---------- */
+.reviews-cta{ text-align:center; margin-top:22px; }
+.write-section{ padding:8px 0 72px; border-top:1px solid var(--line); }
+.write-inner{ padding-top:56px; max-width:640px; margin:0 auto; }
+.write-inner h2{ font-size:clamp(26px,3.4vw,34px); text-align:center; }
+.write-inner .sub{ text-align:center; color:var(--cocoa-soft); font-size:15px; margin:8px 0 32px; }
+.review-form{ background:var(--card); border:1px solid var(--line); border-radius:20px; padding:28px; box-shadow:var(--shadow); }
+.field{ margin-bottom:22px; border:0; padding:0; min-width:0; }
+.field .lbl{ display:block; font-weight:700; font-size:14px; margin-bottom:8px; padding:0; }
+.field .opt{ font-weight:500; color:var(--cocoa-soft); }
+.field input[type=text], .field textarea{
+  width:100%; font:inherit; font-size:16px; padding:13px 14px; border:1.5px solid var(--line);
+  border-radius:12px; background:#fff; color:var(--cocoa);
+}
+.field input[type=text]:focus, .field textarea:focus{ outline:none; border-color:var(--rose); box-shadow:0 0 0 3px rgba(169,80,90,0.18); }
+.field textarea{ min-height:120px; resize:vertical; }
+.char-count{ text-align:end; font-size:12px; color:var(--cocoa-soft); margin-top:4px; }
+
+.star-input{ position:relative; display:inline-flex; flex-direction:row-reverse; gap:4px; }
+.star-input input{ position:absolute; opacity:0; width:1px; height:1px; }
+.star-input label{ font-size:36px; line-height:1; color:#d9cbb6; cursor:pointer; padding:0 2px; }
+.star-input input:checked ~ label,
+.star-input label:hover,
+.star-input label:hover ~ label{ color:var(--caramel); }
+.star-input input:focus-visible + label{ outline:2px solid var(--rose); border-radius:6px; }
+
+.chips{ display:flex; flex-wrap:wrap; gap:8px; }
+.chip{ position:relative; }
+.chip input{ position:absolute; opacity:0; width:1px; height:1px; }
+.chip span{
+  display:inline-block; padding:9px 14px; border:1.5px solid var(--line); border-radius:100px;
+  font-size:13.5px; font-weight:600; cursor:pointer; background:#fff; user-select:none;
+}
+.chip input:checked + span{ background:var(--rose-deep); color:var(--cream); border-color:var(--rose-deep); }
+.chip input:focus-visible + span{ outline:2px solid var(--rose); outline-offset:2px; }
+
+.hp{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+.review-form .btn{ width:100%; justify-content:center; }
+.review-form .btn:disabled{ opacity:0.6; cursor:default; }
+.form-msg{ background:#fbe9e7; border:1px solid #e8b9b4; color:var(--rose-deep); font-size:14px; font-weight:600; padding:12px 14px; border-radius:12px; margin-bottom:16px; }
+.form-note{ font-size:12.5px; color:var(--cocoa-soft); text-align:center; margin:14px 0 0; }
+.form-thanks{ background:var(--card); border:1.5px dashed var(--rose); border-radius:20px; padding:44px 28px; text-align:center; box-shadow:var(--shadow); }
+.form-thanks .stars{ font-size:22px; letter-spacing:4px; color:var(--caramel); margin-bottom:14px; }
+.form-thanks h3{ font-size:22px; margin-bottom:10px; }
+.form-thanks p{ color:var(--cocoa-soft); font-size:15px; line-height:1.55; margin:0 auto; max-width:380px; }
+@media (max-width:560px){ .review-form{ padding:22px 18px; } .star-input label{ font-size:40px; } }
+
 /* ---------- language switch ---------- */
 .lang-link{ font-size:14px; font-weight:700; text-decoration:none; color:var(--rose-deep); padding:9px 14px; border-radius:100px; }
 .lang-link:hover{ background:var(--cream-2); }
@@ -196,3 +243,4 @@ footer .flinks a{ color:var(--cocoa); text-decoration:none; font-weight:600; bor
 @media (max-width:820px){
   [dir="rtl"] .hero-photo .tag-float{ right:16px; }
 }
+[dir="rtl"] .star-input label, [dir="rtl"] .form-thanks .stars{ font-family:-apple-system, 'Segoe UI', sans-serif; }

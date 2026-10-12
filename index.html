@@ -93,13 +93,17 @@
       </div>
       <a class="btn btn-secondary" href="reviews.html">See all reviews</a>
     </div>
-    <div id="reviews-grid" class="grid-reviews hidden" data-limit="3"></div>
-    <div id="empty-state" class="empty-state">
+    <div id="loading-state" class="empty-state">
+      <div class="stars">★ ★ ★ ★ ★</div>
+      <p style="margin:0;">Loading reviews…</p>
+    </div>
+    <div id="empty-state" class="empty-state hidden">
       <div class="stars">★ ★ ★ ★ ★</div>
       <h3>Be the first to leave a review</h3>
       <p>Had a recent order? We'd love to hear what you thought.</p>
-      <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSevzHUflnPCBegyRovaplL9R8rZOSoKz-Ws8k4ZppeKEsU-uQ/viewform?usp=publish-editor" target="_blank" rel="noopener">Leave a review</a>
+      <a class="btn btn-primary" href="reviews.html#write-review">Write a review</a>
     </div>
+    <div id="reviews-grid" class="grid-reviews hidden" data-limit="3"></div>
   </div>
 </section>
 
@@ -117,7 +121,6 @@
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="js/reviews.js"></script>
 
 </body>

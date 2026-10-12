@@ -1,98 +1,163 @@
-// Shared by every page that shows reviews (English and Arabic).
-//
-// Paste your published Google Sheet CSV link between the quotes below.
-// Sheet → File → Share → Publish to web → CSV format → copy the pub?output=csv link.
-// Only rows with "yes" in the Approved column are shown.
-const SHEET_CSV_URL = "PASTE_YOUR_PUBLISHED_CSV_LINK_HERE";
-
-// Page markup this script looks for:
-//   #reviews-grid  – where review cards go. Optional attributes:
-//                    data-limit="3"            show only the newest N reviews
-//                    data-default-name="..."   name used when a row has none
-//   #empty-state   – shown when there are no approved reviews
-//   #loading-state – (optional) shown while the sheet loads
-
 (function () {
-  const grid = document.getElementById("reviews-grid");
-  if (!grid) return;
-  const loading = document.getElementById("loading-state");
-  const empty = document.getElementById("empty-state");
-  const limit = parseInt(grid.dataset.limit, 10) || 0;
-  const defaultName = grid.dataset.defaultName || "Customer";
+  "use strict";
 
-  function escapeHtml(str) {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
+  // Paste your Apps Script Web app URL between the quotes (it ends in /exec).
+  var API_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+  var CONFIGURED = API_URL.indexOf("https://script.google.com/") === 0;
 
-  function findKey(row, matches) {
-    const keys = Object.keys(row);
-    for (const m of matches) {
-      const hit = keys.find(k => k.toLowerCase().includes(m));
-      if (hit) return hit;
+  // Messages in each site language (picked from <html lang="...">)
+  var TEXT = {
+    en: {
+      customer: "Customer",
+      needRating: "Please choose a star rating.",
+      needName: "Please add your name.",
+      needReview: "Please write a few words about your order.",
+      notConnected: "Reviews aren't connected yet. Please try again later.",
+      tooSoon: "You just sent a review. Please wait a minute before sending another.",
+      sending: "Sending…",
+      send: "Send my review",
+      failed: "Something went wrong. Please check your connection and try again."
+    },
+    ar: {
+      customer: "زبون",
+      needRating: "من فضلك اختر عدد النجوم.",
+      needName: "من فضلك أضف اسمك.",
+      needReview: "من فضلك اكتب بضع كلمات عن طلبك.",
+      notConnected: "التقييمات غير مفعّلة بعد. حاول مرة أخرى لاحقًا.",
+      tooSoon: "لقد أرسلت تقييمًا للتو. انتظر دقيقة قبل إرسال تقييم آخر.",
+      sending: "جارٍ الإرسال…",
+      send: "أرسل تقييمي",
+      failed: "حدث خطأ ما. تحقّق من اتصالك وحاول مرة أخرى."
     }
-    return null;
+  };
+  var T = TEXT[document.documentElement.lang] || TEXT.en;
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text != null) node.textContent = text; // textContent = no HTML injection
+    return node;
   }
 
-  function starsFor(value) {
-    if (!value) return "★★★★★";
-    const filled = (value.match(/★|⭐/g) || []).length;
-    if (filled > 0) return "★".repeat(filled) + "☆".repeat(Math.max(0, 5 - filled));
-    const num = parseInt(value, 10);
-    if (!isNaN(num)) return "★".repeat(num) + "☆".repeat(Math.max(0, 5 - num));
-    return "★★★★★";
+  function show(id, on) {
+    var node = document.getElementById(id);
+    if (node) node.classList.toggle("hidden", !on);
   }
 
-  function showEmpty() {
-    if (loading) loading.classList.add("hidden");
-    if (empty) empty.classList.remove("hidden");
+  /* ---------- show approved reviews ---------- */
+  function buildCard(review) {
+    var card = el("div", "review-card");
+    var rating = Math.min(5, Math.max(1, Number(review.rating) || 5));
+    card.appendChild(el("div", "stars", "★".repeat(rating) + "☆".repeat(5 - rating)));
+    var quote = el("p", "quote", review.text || "");
+    quote.dir = "auto"; // Arabic and English reviews each read the right way
+    card.appendChild(quote);
+
+    var who = el("div", "who");
+    var name = String(review.name || T.customer);
+    who.appendChild(el("div", "avatar", name.charAt(0).toUpperCase() || "R"));
+    var meta = el("div", "meta");
+    meta.dir = "auto";
+    meta.appendChild(el("b", null, name));
+    meta.appendChild(document.createTextNode(review.items || ""));
+    who.appendChild(meta);
+    card.appendChild(who);
+    return card;
   }
 
-  function renderReviews(rows) {
-    if (!rows.length) return showEmpty();
+  function renderReviews(list) {
+    var grid = document.getElementById("reviews-grid");
+    if (!grid) return;
+    var limit = parseInt(grid.getAttribute("data-limit"), 10);
+    if (limit > 0) list = list.slice(0, limit);
 
-    const sample = rows[0];
-    const nameKey = findKey(sample, ["name"]);
-    const ratingKey = findKey(sample, ["rate", "rating"]);
-    const itemsKey = findKey(sample, ["order"]);
-    const textKey = findKey(sample, ["experience", "review"]);
-
-    // Newest submissions are at the bottom of the sheet — show them first.
-    rows = rows.slice().reverse();
-    if (limit) rows = rows.slice(0, limit);
-
-    grid.innerHTML = rows.map(row => {
-      const name = (nameKey && row[nameKey] && row[nameKey].trim()) || defaultName;
-      const initial = name.charAt(0).toUpperCase();
-      const items = (itemsKey && row[itemsKey]) ? row[itemsKey].split(",")[0].trim() : "";
-      const text = (textKey && row[textKey]) ? row[textKey].trim() : "";
-      const stars = starsFor(ratingKey ? row[ratingKey] : "");
-      return `
-        <div class="review-card">
-          <div class="stars">${stars}</div>
-          <p class="quote" dir="auto">${escapeHtml(text)}</p>
-          <div class="who">
-            <div class="avatar">${escapeHtml(initial)}</div>
-            <div class="meta" dir="auto"><b>${escapeHtml(name)}</b>${escapeHtml(items)}</div>
-          </div>
-        </div>`;
-    }).join("");
-
-    if (loading) loading.classList.add("hidden");
-    if (empty) empty.classList.add("hidden");
-    grid.classList.remove("hidden");
+    show("loading-state", false);
+    if (!list.length) {
+      show("empty-state", true);
+      return;
+    }
+    grid.innerHTML = "";
+    list.forEach(function (r) { grid.appendChild(buildCard(r)); });
+    show("reviews-grid", true);
   }
 
-  if (!SHEET_CSV_URL || SHEET_CSV_URL.indexOf("PASTE_") === 0) return showEmpty();
+  function loadReviews() {
+    if (!document.getElementById("reviews-grid")) return;
+    if (!CONFIGURED) { renderReviews([]); return; }
 
-  fetch(SHEET_CSV_URL)
-    .then(res => res.text())
-    .then(csvText => {
-      const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
-      const approvedKey = findKey(parsed.data[0] || {}, ["approved", "show"]);
-      const rows = approvedKey
-        ? parsed.data.filter(r => (r[approvedKey] || "").trim().toLowerCase().startsWith("y"))
-        : parsed.data;
-      renderReviews(rows);
-    })
-    .catch(showEmpty);
+    fetch(API_URL)
+      .then(function (res) { return res.json(); })
+      .then(function (data) { renderReviews(data && data.ok ? data.reviews || [] : []); })
+      .catch(function () { renderReviews([]); });
+  }
+
+  /* ---------- review form ---------- */
+  function initForm() {
+    var form = document.getElementById("review-form");
+    if (!form) return;
+
+    var msg = document.getElementById("form-msg");
+    var button = document.getElementById("submit-review");
+    var counter = document.getElementById("char-count");
+    var textarea = form.elements["review"];
+
+    function setMsg(text) { msg.textContent = text; msg.classList.toggle("hidden", !text); }
+
+    if (textarea && counter) {
+      textarea.addEventListener("input", function () {
+        counter.textContent = textarea.value.length + " / " + textarea.maxLength;
+      });
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      setMsg("");
+
+      var name = form.elements["name"].value.trim();
+      var review = form.elements["review"].value.trim();
+      var ratingInput = form.querySelector('input[name="rating"]:checked');
+
+      if (!ratingInput) { setMsg(T.needRating); return; }
+      if (!name) { setMsg(T.needName); return; }
+      if (review.length < 5) { setMsg(T.needReview); return; }
+      if (!CONFIGURED) { setMsg(T.notConnected); return; }
+
+      try {
+        var last = Number(localStorage.getItem("cdbr_last_review") || 0);
+        if (Date.now() - last < 60000) { setMsg(T.tooSoon); return; }
+      } catch (e) { /* storage unavailable: ignore */ }
+
+      var items = Array.prototype.map.call(
+        form.querySelectorAll('input[name="items"]:checked'),
+        function (box) { return box.value; }
+      ).join(", ");
+
+      var body = new URLSearchParams();
+      body.set("name", name);
+      body.set("rating", ratingInput.value);
+      body.set("items", items);
+      body.set("review", review);
+      body.set("instagram", form.elements["instagram"].value.trim());
+      body.set("website", form.elements["website"].value); // honeypot
+
+      button.disabled = true;
+      button.textContent = T.sending;
+
+      // no-cors: the browser sends it but hides the reply, which is fine here
+      fetch(API_URL, { method: "POST", mode: "no-cors", body: body })
+        .then(function () {
+          try { localStorage.setItem("cdbr_last_review", String(Date.now())); } catch (e) {}
+          form.classList.add("hidden");
+          show("form-thanks", true);
+        })
+        .catch(function () {
+          button.disabled = false;
+          button.textContent = T.send;
+          setMsg(T.failed);
+        });
+    });
+  }
+
+  loadReviews();
+  initForm();
 })();

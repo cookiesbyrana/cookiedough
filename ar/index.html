@@ -94,13 +94,17 @@
       </div>
       <a class="btn btn-secondary" href="reviews.html">عرض كل التقييمات</a>
     </div>
-    <div id="reviews-grid" class="grid-reviews hidden" data-limit="3" data-default-name="زبون"></div>
-    <div id="empty-state" class="empty-state">
+    <div id="loading-state" class="empty-state">
+      <div class="stars">★ ★ ★ ★ ★</div>
+      <p style="margin:0;">جارٍ تحميل التقييمات…</p>
+    </div>
+    <div id="empty-state" class="empty-state hidden">
       <div class="stars">★ ★ ★ ★ ★</div>
       <h3>كن أول من يترك تقييمًا</h3>
       <p>طلبت مؤخرًا؟ يسعدنا أن نسمع رأيك.</p>
-      <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSevzHUflnPCBegyRovaplL9R8rZOSoKz-Ws8k4ZppeKEsU-uQ/viewform?usp=publish-editor" target="_blank" rel="noopener">اترك تقييمًا</a>
+      <a class="btn btn-primary" href="reviews.html#write-review">اكتب تقييمًا</a>
     </div>
+    <div id="reviews-grid" class="grid-reviews hidden" data-limit="3"></div>
   </div>
 </section>
 
@@ -118,7 +122,6 @@
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="../js/reviews.js"></script>
 
 </body>
