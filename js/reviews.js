@@ -1,8 +1,9 @@
 (function () {
   "use strict";
 
-  // Paste your Apps Script Web app URL between the quotes (it ends in /exec).
-  var API_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+  // Apps Script Web app URL (see apps-script/Code.gs). Redeploying as a
+  // "New version" keeps this URL, so it only changes for a brand-new deployment.
+  var API_URL = "https://script.google.com/macros/s/AKfycbwXTeu1wOT7TBYhcZ0qiVEF8fRygfJeXwp8ak3y1JE1lo_nC1IB0cPP2xSXPT0f7xYcpw/exec";
   var CONFIGURED = API_URL.indexOf("https://script.google.com/") === 0;
 
   // Messages in each site language (picked from <html lang="...">)

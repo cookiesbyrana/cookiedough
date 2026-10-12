@@ -47,7 +47,7 @@ reviews.html / index.html (and the ar/ copies) display only the approved reviews
 2. Extensions → Apps Script → delete the sample code → paste everything from `apps-script/Code.gs` → Save.
 3. Deploy → New deployment → gear icon → **Web app**. Execute as: **Me**. Who has access: **Anyone**. Deploy and authorize.
    (Google shows an "unverified app" warning because it's your own script: Advanced → Go to project → Allow.)
-4. Copy the **Web app URL** (ends in `/exec`) and paste it into `js/reviews.js` where it says `PASTE_YOUR_WEB_APP_URL_HERE`.
+4. Copy the **Web app URL** (ends in `/exec`) into `API_URL` at the top of `js/reviews.js` (already done for the current deployment).
 5. Deploy the site.
 
 ### Approving reviews
