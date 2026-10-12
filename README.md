@@ -39,7 +39,13 @@ reviews.html / index.html (and the ar/ copies) display only the approved reviews
 - New reviews are saved with **Approved blank**, so nothing shows until you type `yes`.
 - The website only ever receives name, rating, items and review text. Never the Instagram handle or timestamp.
 - The Arabic form sends the same English item names (e.g. "Pretzel Cookie"), so the Sheet stays consistent whichever language the customer used.
-- Spam protection: hidden honeypot field, length limits, 60-second resend limit, formulas blocked.
+- Spam protection (enforced in `Code.gs`, so it can't be bypassed by skipping the website):
+  - At most **10 reviews per hour** and **30 per day** are accepted; more are refused with a "try again later" message.
+  - At most **5 emails per hour**; after that you get one "lots of reviews" alert and the rest wait in the Sheet.
+    This also keeps you under Google's ~100 emails/day limit.
+  - Hidden honeypot field, submissions faster than 3 seconds, and exact duplicates are silently dropped.
+  - Length limits, and visitor text is stored as plain text so it can't run as a formula.
+  - All limits are settings at the top of `Code.gs`.
 
 ### One-time setup
 

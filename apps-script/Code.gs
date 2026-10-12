@@ -22,6 +22,16 @@ var MAX_ITEMS = 200;
 var MAX_TEXT = 800;
 var MAX_IG = 40;
 
+// Spam protection. A small bakery gets far fewer real reviews than this, so these only
+// kick in if someone floods the form. Reviews over the limit are refused, not saved.
+var MAX_REVIEWS_PER_HOUR = 10;
+var MAX_REVIEWS_PER_DAY = 30;
+// At most this many review emails per hour; after that you get ONE "lots of reviews" alert
+// and the rest wait in the Sheet. Keeps your inbox (and Google's ~100 emails/day limit) safe.
+var MAX_EMAILS_PER_HOUR = 5;
+// Real people take longer than this to fill in the form; bots usually don't.
+var MIN_FILL_SECONDS = 3;
+
 // Where new-review emails go. Leave empty to use the Google account that owns this script.
 var NOTIFY_EMAIL = '';
 var SITE_URL = 'https://cookiesbyrana.netlify.app/reviews.html';
@@ -97,8 +107,10 @@ function doPost(e) {
     lock.waitLock(10000);
     var p = (e && e.parameter) || {};
 
-    // Honeypot: real visitors never fill this hidden field
+    // Honeypot: real visitors never fill this hidden field.
+    // Too-fast submissions are bots too. Both get a fake "ok" so they don't learn anything.
     if (p.website) return json_({ ok: true });
+    if (p.elapsed && Number(p.elapsed) < MIN_FILL_SECONDS * 1000) return json_({ ok: true });
 
     var name = clean_(p.name, MAX_NAME);
     var text = clean_(p.review, MAX_TEXT);
@@ -108,6 +120,13 @@ function doPost(e) {
     }
 
     var sh = getSheet_();
+    var recent = recentActivity_(sh);
+    if (recent.lastHour >= MAX_REVIEWS_PER_HOUR || recent.lastDay >= MAX_REVIEWS_PER_DAY) {
+      return json_({ ok: false, error: 'busy' });
+    }
+    // Same text sent again (double click, or a bot repeating itself): don't store it twice
+    if (recent.texts.indexOf(text.toLowerCase()) !== -1) return json_({ ok: true });
+
     var row = sh.getLastRow() + 1;
     var token = Utilities.getUuid();
     saved = {
@@ -128,8 +147,41 @@ function doPost(e) {
   }
 
   // A failed email must never lose the review, which is already saved
-  try { notify_(saved); } catch (err) { console.error('Review email failed: ' + err); }
+  try {
+    var thisHour = recent.lastHour + 1;
+    if (thisHour <= MAX_EMAILS_PER_HOUR) notify_(saved);
+    else if (thisHour === MAX_EMAILS_PER_HOUR + 1) notifyFlood_();
+  } catch (err) { console.error('Review email failed: ' + err); }
   return json_({ ok: true });
+}
+
+// Counts recent reviews from the Sheet itself, so no extra storage is needed
+function recentActivity_(sh) {
+  var last = sh.getLastRow();
+  var out = { lastHour: 0, lastDay: 0, texts: [] };
+  if (last < 2) return out;
+  var first = Math.max(2, last - 199); // the newest 200 rows are plenty
+  var rows = sh.getRange(first, 1, last - first + 1, 5).getValues();
+  var now = Date.now();
+  rows.forEach(function (r) {
+    var t = r[0] instanceof Date ? r[0].getTime() : new Date(r[0]).getTime();
+    if (!isNaN(t) && now - t < 3600 * 1000) out.lastHour++;
+    if (!isNaN(t) && now - t < 24 * 3600 * 1000) out.lastDay++;
+    out.texts.push(String(r[4]).trim().toLowerCase());
+  });
+  return out;
+}
+
+function notifyFlood_() {
+  MailApp.sendEmail({
+    to: NOTIFY_EMAIL || Session.getEffectiveUser().getEmail(),
+    subject: 'Lots of new reviews on your website',
+    body: 'More than ' + MAX_EMAILS_PER_HOUR + ' reviews arrived in the last hour, so review emails are paused ' +
+      'until it calms down. Nothing is shown on the site until you approve it.\n\n' +
+      'Open the Reviews tab in your Sheet to look through them. If they look like spam, ' +
+      'just delete those rows.',
+    name: 'Cookie Dough by Rana website'
+  });
 }
 
 /* ---------- email approval ---------- */

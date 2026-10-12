@@ -17,7 +17,8 @@
       tooSoon: "You just sent a review. Please wait a minute before sending another.",
       sending: "Sending…",
       send: "Send my review",
-      failed: "Something went wrong. Please check your connection and try again."
+      failed: "Something went wrong. Please check your connection and try again.",
+      busy: "We're getting a lot of reviews right now. Please try again in a little while."
     },
     ar: {
       customer: "زبون",
@@ -28,7 +29,8 @@
       tooSoon: "لقد أرسلت تقييمًا للتو. انتظر دقيقة قبل إرسال تقييم آخر.",
       sending: "جارٍ الإرسال…",
       send: "أرسل تقييمي",
-      failed: "حدث خطأ ما. تحقّق من اتصالك وحاول مرة أخرى."
+      failed: "حدث خطأ ما. تحقّق من اتصالك وحاول مرة أخرى.",
+      busy: "نستقبل الكثير من التقييمات حاليًا. من فضلك حاول مرة أخرى بعد قليل."
     }
   };
   var T = TEXT[document.documentElement.lang] || TEXT.en;
@@ -101,6 +103,7 @@
     var button = document.getElementById("submit-review");
     var counter = document.getElementById("char-count");
     var textarea = form.elements["review"];
+    var shownAt = Date.now();
 
     function setMsg(text) { msg.textContent = text; msg.classList.toggle("hidden", !text); }
 
@@ -140,22 +143,26 @@
       body.set("review", review);
       body.set("instagram", form.elements["instagram"].value.trim());
       body.set("website", form.elements["website"].value); // honeypot
+      body.set("elapsed", String(Date.now() - shownAt)); // bots fill forms instantly
 
       button.disabled = true;
       button.textContent = T.sending;
 
-      // no-cors: the browser sends it but hides the reply, which is fine here
-      fetch(API_URL, { method: "POST", mode: "no-cors", body: body })
-        .then(function () {
+      function fail(text) {
+        button.disabled = false;
+        button.textContent = T.send;
+        setMsg(text);
+      }
+
+      fetch(API_URL, { method: "POST", body: body })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (!data || !data.ok) return fail(data && data.error === "busy" ? T.busy : T.failed);
           try { localStorage.setItem("cdbr_last_review", String(Date.now())); } catch (e) {}
           form.classList.add("hidden");
           show("form-thanks", true);
         })
-        .catch(function () {
-          button.disabled = false;
-          button.textContent = T.send;
-          setMsg(T.failed);
-        });
+        .catch(function () { fail(T.failed); });
     });
   }
 
