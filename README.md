@@ -52,13 +52,20 @@ reviews.html / index.html (and the ar/ copies) display only the approved reviews
 
 ### Approving reviews
 
-Open the Sheet → **Reviews** tab → type `yes` in the **Approved** column of any row you want to show.
-To hide one later, clear the cell. Changes appear on the site on the next page load.
+**By email (easiest):** every new review is emailed to you (the Google account that owns the script)
+with **Approve** and **Decline** buttons. Tap one, then confirm on the page that opens.
+The confirm step stops email security scanners, which open links automatically, from approving or declining on their own.
+To send the emails to a different address, set `NOTIFY_EMAIL` at the top of `Code.gs`.
+
+**In the Sheet:** open the **Reviews** tab and type `yes` in the **Approved** column (or `no` to hide).
+The **Token** column is the secret that makes the email buttons work. Don't edit it.
+
+Changes appear on the site on the next page load.
 
 ### Changing the Apps Script later
 
 Editing the code is not enough: Deploy → **Manage deployments** → pencil icon → Version: **New version** → Deploy.
-The URL stays the same.
+The URL stays the same. If Google asks for new permissions (e.g. "Send email as you" for the review emails), allow them.
 
 ## Deploying the site
 
