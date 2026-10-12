@@ -44,7 +44,7 @@ a{ color:inherit; }
 .nav-link:not(.active):hover{ background:var(--cream-2); color:var(--cocoa); }
 .ig-link{
   display:flex; align-items:center; gap:7px; font-size:13.5px; font-weight:600; color:var(--cocoa);
-  text-decoration:none; border:1.5px solid var(--line); padding:8px 14px 8px 10px; border-radius:100px; background:var(--card);
+  text-decoration:none; border:1.5px solid var(--line); padding-block:8px; padding-inline:10px 14px; border-radius:100px; background:var(--card);
 }
 .ig-link svg{ width:16px; height:16px; flex-shrink:0; }
 
@@ -117,10 +117,11 @@ a{ color:inherit; }
 .box-card h3{ font-size:16px; margin-bottom:10px; line-height:1.3; min-height:42px; }
 .box-card ul{ list-style:none; margin:0 0 16px; padding:0; }
 .box-card li{ font-size:13.5px; color:var(--cocoa-soft); padding:3px 0; }
-.box-card li::before{ content:"•"; color:var(--rose); margin-right:7px; }
+.box-card li::before{ content:"•"; color:var(--rose); margin-inline-end:7px; }
 .box-card .price{ font-family:'Fraunces',serif; font-weight:700; color:var(--cocoa); font-size:19px; border-top:1px solid var(--line); padding-top:12px; }
 .box-card .price small{ font-family:'Karla',sans-serif; font-weight:500; font-size:11.5px; color:var(--cocoa-soft); display:block; margin-top:2px; }
 .menu-note{ text-align:center; font-size:13px; color:var(--cocoa-soft); margin-top:32px; }
+.menu-note.brownie-note{ margin-top:16px; font-style:italic; }
 .menu-cta{ text-align:center; margin-top:40px; }
 
 /* ---------- reviews ---------- */
@@ -172,4 +173,26 @@ footer .flinks a{ color:var(--cocoa); text-decoration:none; font-weight:600; bor
 @media (max-width:480px){
   .cookie-grid{ grid-template-columns:1fr 1fr; gap:12px; }
   .box-grid{ grid-template-columns:1fr; }
+  .box-photo{ aspect-ratio:1; }
+}
+
+/* ---------- language switch ---------- */
+.lang-link{ font-size:14px; font-weight:700; text-decoration:none; color:var(--rose-deep); padding:9px 14px; border-radius:100px; }
+.lang-link:hover{ background:var(--cream-2); }
+.lang-link[lang="ar"]{ font-family:'Tajawal',sans-serif; }
+
+/* ---------- Arabic / right-to-left ---------- */
+[dir="rtl"] body{ font-family:'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3,
+[dir="rtl"] .step-num, [dir="rtl"] .avatar,
+[dir="rtl"] .cookie-card .price, [dir="rtl"] .box-card .price,
+[dir="rtl"] .tag-float .txt b, [dir="rtl"] footer .fbrand{ font-family:'El Messiri', Georgia, serif; }
+[dir="rtl"] .brand-name span, [dir="rtl"] .btn, [dir="rtl"] .box-card .price small{ font-family:'Tajawal',sans-serif; }
+[dir="rtl"] .hero h1, [dir="rtl"] .menu-sub-label{ letter-spacing:0; }
+[dir="rtl"] .hero h1{ line-height:1.3; }
+[dir="rtl"] .hero h1 em, [dir="rtl"] .cookie-card p.note, [dir="rtl"] .menu-note.brownie-note{ font-style:normal; }
+[dir="rtl"] .hero-photo .tag-float{ left:auto; right:-18px; }
+[dir="rtl"] .step-card p, [dir="rtl"] .hero p.lede, [dir="rtl"] .review-card p.quote{ line-height:1.75; }
+@media (max-width:820px){
+  [dir="rtl"] .hero-photo .tag-float{ right:16px; }
 }
