@@ -59,8 +59,9 @@ reviews.html / index.html (and the ar/ copies) display only the approved reviews
 ### Approving reviews
 
 **By email (easiest):** every new review is emailed to you (the Google account that owns the script)
-with **Approve** and **Decline** buttons. Tap one, then confirm on the page that opens.
-The confirm step stops email security scanners, which open links automatically, from approving or declining on their own.
+with **Approve** and **Decline** buttons. One tap does it.
+If the emails ever go to a work / Outlook inbox, set `CONFIRM_CLICKS = true` in `Code.gs`: their security
+scanners open every link automatically, so the buttons then ask "Yes, approve?" before changing anything.
 To send the emails to a different address, set `NOTIFY_EMAIL` at the top of `Code.gs`.
 
 **In the Sheet:** open the **Reviews** tab and type `yes` in the **Approved** column (or `no` to hide).

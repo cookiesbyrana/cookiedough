@@ -35,6 +35,10 @@ var MIN_FILL_SECONDS = 3;
 // Where new-review emails go. Leave empty to use the Google account that owns this script.
 var NOTIFY_EMAIL = '';
 var SITE_URL = 'https://cookiesbyrana.netlify.app/reviews.html';
+// false = one tap on Approve / Decline in the email does it (safe for Gmail).
+// true  = the button opens a "Yes, approve?" page first. Use this if the emails go to a
+//         work / Outlook inbox: their security scanners open every link automatically.
+var CONFIRM_CLICKS = false;
 
 function getSheet_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -246,9 +250,7 @@ function page_(title, message, extraHtml) {
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
 
-// The email buttons open a confirmation page first, and only the button on that page
-// changes the review. Some email security scanners open every link in a message
-// automatically; this stops them from approving or declining on their own.
+// Handles the Approve / Decline buttons from the email (see CONFIRM_CLICKS above).
 function handleDecision_(p) {
   var action = p.action === 'approve' ? 'approve' : p.action === 'decline' ? 'decline' : '';
   var sh = getSheet_();
@@ -261,7 +263,7 @@ function handleDecision_(p) {
   var name = esc_(values[1]);
   var verb = action === 'approve' ? 'Approve' : 'Decline';
 
-  if (p.confirm !== '1') {
+  if (CONFIRM_CLICKS && p.confirm !== '1') {
     var confirmUrl = ScriptApp.getService().getUrl() + '?action=' + action +
       '&token=' + encodeURIComponent(p.token) + '&confirm=1';
     var color = action === 'approve' ? '#2E7D4F' : '#7E2E38';
