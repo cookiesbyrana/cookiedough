@@ -279,3 +279,17 @@ function handleDecision_(p) {
   }
   return page_('Declined', 'The review from <b>' + name + '</b> will not be shown on your website.');
 }
+
+/* ---------- setup helper ---------- */
+
+// Run this once from the Apps Script editor (pick "testEmail" in the toolbar → Run).
+// Google then asks for the "Send email as you" permission, and you get a sample email.
+// Afterwards: Deploy → Manage deployments → pencil → New version → Deploy.
+function testEmail() {
+  notify_({
+    name: 'Test customer', rating: 5, items: 'Classic Cookie',
+    text: 'This is a test email. The buttons below won\'t change anything.',
+    instagram: '', token: 'test'
+  });
+  Logger.log('Test email sent to ' + (NOTIFY_EMAIL || Session.getEffectiveUser().getEmail()));
+}
