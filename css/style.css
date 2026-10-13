@@ -196,7 +196,6 @@ footer .flinks a{ color:var(--cocoa); text-decoration:none; font-weight:600; bor
 @media (max-width:480px){
   .cookie-grid{ grid-template-columns:1fr 1fr; gap:12px; }
   .box-grid{ grid-template-columns:1fr; }
-  .box-photo{ aspect-ratio:1; }
   .cookie-img{ width:118px; height:118px; }
   .inside-grid{ gap:10px; }
   .inside-tile figcaption{ padding:30px 12px 12px; font-size:12px; }
