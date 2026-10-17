@@ -139,6 +139,23 @@ a{ color:inherit; }
 .box-card li::before{ content:"•"; color:var(--rose); margin-inline-end:7px; }
 .box-card .price{ font-family:'Fraunces',serif; font-weight:700; color:var(--cocoa); font-size:19px; border-top:1px solid var(--line); padding-top:12px; }
 .box-card .price small{ font-family:'Karla',sans-serif; font-weight:500; font-size:11.5px; color:var(--cocoa-soft); display:block; margin-top:2px; }
+/* ---------- special / limited product ---------- */
+.special-card{
+  display:grid; grid-template-columns:380px 1fr; background:var(--card); border:1px solid var(--line);
+  border-radius:22px; overflow:hidden; box-shadow:var(--shadow); margin-bottom:48px;
+}
+.special-photo{ aspect-ratio:4/5; overflow:hidden; }
+.special-photo img{ width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
+.special-card:hover .special-photo img{ transform:scale(1.04); }
+.special-body{ padding:36px 40px; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; gap:14px; }
+.special-badge{
+  background:var(--rose-deep); color:var(--cream); font-size:12px; font-weight:700; letter-spacing:1px;
+  text-transform:uppercase; padding:6px 13px; border-radius:100px;
+}
+.special-body h3{ font-size:clamp(26px,3vw,34px); }
+.special-body p{ color:var(--cocoa-soft); font-size:15.5px; line-height:1.6; margin:0; max-width:440px; }
+.special-body p.special-note{ font-size:13.5px; font-style:italic; }
+.special-body .btn{ margin-top:6px; }
 .menu-note{ text-align:center; font-size:13px; color:var(--cocoa-soft); margin-top:32px; }
 .menu-note.brownie-note{ margin-top:16px; font-style:italic; }
 .menu-cta{ text-align:center; margin-top:40px; }
@@ -185,6 +202,10 @@ footer .flinks a{ color:var(--cocoa); text-decoration:none; font-weight:600; bor
   .cookie-grid{ grid-template-columns:repeat(2,1fr); }
   .box-grid{ grid-template-columns:repeat(2,1fr); }
   .inside-grid{ grid-template-columns:repeat(2,1fr); }
+  .special-card{ grid-template-columns:1fr; }
+  .special-photo{ aspect-ratio:4/3; }
+  .special-photo img{ object-position:center 40%; }
+  .special-body{ padding:26px 22px 28px; }
   .menu-banner{ aspect-ratio:16/7; }
 }
 @media (max-width:560px){
@@ -270,3 +291,5 @@ footer .flinks a{ color:var(--cocoa); text-decoration:none; font-weight:600; bor
   [dir="rtl"] .hero-photo .tag-float{ right:16px; }
 }
 [dir="rtl"] .star-input label, [dir="rtl"] .form-thanks .stars{ font-family:-apple-system, 'Segoe UI', sans-serif; }
+[dir="rtl"] .special-badge{ letter-spacing:0; }
+[dir="rtl"] .special-body p.special-note{ font-style:normal; }
