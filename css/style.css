@@ -136,7 +136,7 @@ a{ color:inherit; }
   display:grid; grid-template-columns:380px 1fr; background:var(--card); border:1px solid var(--line);
   border-radius:22px; overflow:hidden; box-shadow:var(--shadow); margin-bottom:48px;
 }
-.special-photo{ aspect-ratio:4/5; overflow:hidden; }
+.special-photo{ aspect-ratio:3/4; overflow:hidden; }
 .special-photo img{ width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
 .special-card:hover .special-photo img{ transform:scale(1.04); }
 .special-body{ padding:36px 40px; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; gap:14px; }
@@ -194,8 +194,6 @@ footer .flinks a{ color:var(--cocoa); text-decoration:none; font-weight:600; bor
   .box-grid{ grid-template-columns:repeat(2,1fr); }
   .inside-grid{ grid-template-columns:repeat(2,1fr); }
   .special-card{ grid-template-columns:1fr; }
-  .special-photo{ aspect-ratio:4/3; }
-  .special-photo img{ object-position:center 40%; }
   .special-body{ padding:26px 22px 28px; }
   .menu-banner{ aspect-ratio:16/7; }
 }
